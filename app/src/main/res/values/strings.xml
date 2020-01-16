@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">ChallengeMeLi</string>
+    <string name="buscar">BUSCAR</string>
+    <string name="ingrese_un_texto_para_buscar">Ingrese un texto para buscar</string>
 </resources>
