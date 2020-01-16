@@ -5,7 +5,7 @@ public class Results {
     private String id;
     private String title;
     private String price;
-    private String currency;
+    private String currency_id;
     private String thumbnail;
     private String condition;
     private String permalink;
@@ -38,12 +38,12 @@ public class Results {
         this.price = price;
     }
 
-    public String getCurrency() {
-        return currency;
+    public String getCurrency_Id() {
+        return currency_id;
     }
 
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCurrency_Id(String currency_id) {
+        this.currency_id = currency_id;
     }
 
     public String getThumbnail() {

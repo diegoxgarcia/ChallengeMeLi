@@ -84,8 +84,7 @@ public class ResultRecyclerViewAdapter extends RecyclerView.Adapter<ResultRecycl
             this.tvId.setText(re.getId());
             this.tvCurrency.setText(re.getCurrency());
             this.tvPrice.setText(re.getPrice());
-
-            Picasso.get().load(re.getThumbnail()).centerCrop().into(this.ivThumb);
+            Picasso.get().load(re.getThumbnail().replace("http", "https")).resize(200,200).centerCrop().into(this.ivThumb);
         }
     }
 }

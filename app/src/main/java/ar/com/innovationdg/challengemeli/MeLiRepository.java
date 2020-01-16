@@ -26,6 +26,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class MeLiRepository {
     private ResultDao resultDao;
     private LiveData<List<ResultEntity>> allResults;
+    private LiveData<List<ResultEntity>> resultById;
 
     public MeLiRepository(Application application){
         MeLiRoomDatabase db = MeLiRoomDatabase.getDatabase(application);
@@ -33,11 +34,59 @@ public class MeLiRepository {
         allResults = resultDao.getAll();
     }
 
+    /* Repository Room
+        Aca se encuentran los metodos del repositorio que se comunican mediante el DAO a los modelos
+        de Room.
+     */
+
     public LiveData<List<ResultEntity>> getAll() { return allResults; }
+
+    public LiveData<List<ResultEntity>> getResultById(int idRoom){
+        resultById = resultDao.getResultsById(idRoom);
+        return resultById;
+    }
 
     public void insert(List<Results> results){
         new insertAsyncTask(resultDao).execute(results);
     }
+
+    public void deleteAll(){
+        new deleteAsyncTask(resultDao).execute();
+    }
+    private static class insertAsyncTask extends AsyncTask<List<Results> , Void, Void> {
+        private ResultDao resultAsyncTask;
+
+        insertAsyncTask(ResultDao dao) {
+            resultAsyncTask = dao;
+        }
+
+        @Override
+        protected Void doInBackground(List<Results> ... resultEntities) {
+            List<Results> results = resultEntities[0];
+            for (Results res:results) {
+                ResultEntity re = new ResultEntity(res.getId(),res.getTitle(),res.getPrice(),res.getCurrency_Id()
+                        ,res.getThumbnail(),res.getCondition(),res.getPermalink(),res.getAddress().getState_id(),
+                        res.getAddress().getState_name(), res.getAddress().getCity_id(),res.getAddress().getCity_name());
+                resultAsyncTask.insert(re);
+            }
+            return null;
+        }
+    }
+
+    private static class deleteAsyncTask extends AsyncTask<Void, Void, Void>{
+        private ResultDao resultDao;
+
+        public deleteAsyncTask(ResultDao dao) {
+            resultDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            resultDao.deleteAll();
+            return null;
+        }
+    }
+
 
 
     public LiveData<List<Results>> getAllResults(String item){
@@ -65,23 +114,6 @@ public class MeLiRepository {
     }
 
 
-    private static class insertAsyncTask extends AsyncTask<List<Results> , Void, Void> {
-        private ResultDao resultAsyncTask;
 
-        insertAsyncTask(ResultDao dao) {
-            resultAsyncTask = dao;
-        }
 
-        @Override
-        protected Void doInBackground(List<Results> ... resultEntities) {
-            List<Results> results = resultEntities[0];
-            for (Results res:results) {
-                ResultEntity re = new ResultEntity(res.getId(),res.getTitle(),res.getPrice(),res.getCurrency()
-                ,res.getThumbnail(),res.getCondition(),res.getPermalink(),res.getAddress().getState_id(),
-                        res.getAddress().getState_name(), res.getAddress().getCity_id(),res.getAddress().getCity_name());
-                resultAsyncTask.insert(re);
-            }
-            return null;
-        }
-    }
 }

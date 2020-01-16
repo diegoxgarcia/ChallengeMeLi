@@ -17,6 +17,7 @@ public class MeLiViewModel extends AndroidViewModel {
     private MeLiRepository meLiRepository;
     private LiveData<List<Results>> allSearchedData;
     private LiveData<List<ResultEntity>> allResults;
+    private LiveData<List<ResultEntity>> resultByIdRoom;
 
 
     public MeLiViewModel(@NonNull Application application) {
@@ -35,8 +36,17 @@ public class MeLiViewModel extends AndroidViewModel {
         return allSearchedData;
     }
 
+
+    public LiveData<List<ResultEntity>> getDataById(int idRoom){
+        resultByIdRoom = meLiRepository.getResultById(idRoom);
+        return  resultByIdRoom;
+    }
+
     public void insertAllResults(List<Results> resultList){
         meLiRepository.insert(resultList);
     }
 
+    public void deleteAllResults(){
+        meLiRepository.deleteAll();
+    }
 }

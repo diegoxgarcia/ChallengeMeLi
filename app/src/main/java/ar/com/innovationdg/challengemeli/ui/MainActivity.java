@@ -1,5 +1,6 @@
 package ar.com.innovationdg.challengemeli.ui;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         EditText searchText = findViewById(R.id.searchText);
         String item = searchText.getText().toString();
         meLiViewModel = new ViewModelProvider(this).get(MeLiViewModel.class);
+        meLiViewModel.deleteAllResults();
         meLiViewModel.getAllSearchData(item).observe(this, new Observer<List<Results>>() {
             @Override
             public void onChanged(List<Results> results) {
@@ -60,4 +62,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 }
