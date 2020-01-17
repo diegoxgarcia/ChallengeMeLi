@@ -7,7 +7,10 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -34,6 +37,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void searchItem(){
+        final ProgressDialog pd = new ProgressDialog(MainActivity.this);
+        pd.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        pd.setTitle("Buscando Articulos");
+        pd.setMessage("Searching.........");
+        pd.getWindow().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#FFD4D9D0")));
+        pd.setIndeterminate(false);
+        pd.show();
+
         EditText searchText = findViewById(R.id.searchText);
         String item = searchText.getText().toString();
         meLiViewModel = new ViewModelProvider(this).get(MeLiViewModel.class);
@@ -42,7 +53,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onChanged(List<Results> results) {
                 meLiViewModel.insertAllResults(results);
+                pd.dismiss();
                 goToSearchResultActivity();
+
             }
         });
     }
